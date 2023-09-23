@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .lightbg {
+    @apply bg-zinc-200;
+  }
+  .darkbg {
+    @apply dark:bg-zinc-900;
+  }
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
