@@ -27,28 +27,24 @@ export default function Header() {
       {/* Search */}
 
       {/* Icons & Settings */}
-      <div className="flex">
+      <div className="flex items-center">
         <Link href="/" className="mr-4">
-          CRUD
+          Home
         </Link>
-
         {theme === 'light' ? (
           <MoonIcon
-            className="h-6 w-6 cursor-pointer text-black"
+            className="h-5 w-5 mt-1 cursor-pointer text-black"
             onClick={toggleTheme}
           />
         ) : (
           <SunIcon
-            className="h-6 w-6 cursor-pointer text-yellow-500"
+            className="h-5 w-5 mt-1 cursor-pointer text-yellow-500"
             onClick={toggleTheme}
           />
         )}
       </div>
       {/* change theme */}
       <div className="flex items-center">
-        <Link href="/" className="m-4">
-          Home
-        </Link>
         <Link href="/posts" className="m-4">
           Posts
         </Link>

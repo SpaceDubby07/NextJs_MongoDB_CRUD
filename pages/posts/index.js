@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clientPromise from '../../lib/mongodb';
 import PostForm from './components/PostForm';
 import Link from 'next/link';
@@ -6,8 +6,8 @@ import { useSession } from 'next-auth/react';
 
 export default function PostsHome({ posts }) {
   const { data: session } = useSession();
-  console.log(session);
   const [postList, setPostList] = useState(posts); // Initialize the local state with the initial posts data
+  console.log(postList);
 
   // Function to handle form submission
   const handlePostSubmit = async (formData) => {
@@ -22,8 +22,8 @@ export default function PostsHome({ posts }) {
 
       if (res.status === 201) {
         const newPostData = await res.json();
-        // setNewPosts((prevNewPosts) => [...prevNewPosts, newPostData]);
-        setPostList((prevPostList) => [...prevPostList, newPostData]);
+        // get the new post data first, then populate the previous post list
+        setPostList((prevPostList) => [newPostData, ...prevPostList]);
       } else {
         // Handle errors
       }
@@ -55,39 +55,95 @@ export default function PostsHome({ posts }) {
     }
   };
 
+  // Periodically fetch new data every 10 seconds
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/posts/posts`, {
+          method: 'GET',
+        });
+
+        if (res.status === 200) {
+          const result = await res.json();
+          const newPostData = result.data; // Access the 'data' property
+
+          // Ensure that newPostData is an array
+          if (Array.isArray(newPostData)) {
+            // Check if there are new posts by comparing with the existing data
+            const hasNewPosts = newPostData.some(
+              (newPost) =>
+                !postList.some(
+                  (existingPost) => existingPost._id === newPost._id
+                )
+            );
+
+            // Check if any posts have been removed by comparing with the new data
+            const removedPosts = postList.filter(
+              (existingPost) =>
+                !newPostData.some((newPost) => newPost._id === existingPost._id)
+            );
+
+            // If there are new posts or removed posts, update the state
+            if (hasNewPosts || removedPosts.length > 0) {
+              setPostList(newPostData);
+            }
+          } else {
+            // Handle the case where newPostData is not an array
+            console.error('Fetched data is not an array:', newPostData);
+          }
+        } else {
+          // Handle errors
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    const interval = setInterval(fetchData, 3000); // Fetch data every 10 seconds
+
+    return () => clearInterval(interval); // Clean up the interval when the component unmounts
+  }, [postList]); // Include postList as a dependency to compare with the new data
+
   return (
     <div>
       {session ? (
-        <PostForm onSubmit={handlePostSubmit} />
+        <div className="mx-4">
+          <PostForm onSubmit={handlePostSubmit} />
+        </div>
       ) : (
-        <div className="text-center font-bold text-xl my-10">
+        <div className="text-center font-bold text-xl my-10 col-span-3">
           Please sign in to create a post
         </div>
       )}
-
-      {postList.map((post) => (
-        <div key={post._id} className="border p-4 rounded-md m-4">
-          <p className="p-1">Username: {post.username}</p>
-          <p className="p-1">Email: {post.email}</p>
-          <p className="p-1">Message: {post.message}</p>
-          <div className="flex justify-between my-4 items-center">
-            <Link
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              href={`/posts/${post._id}`}
-            >
-              View Details
-            </Link>
-            {session && session.user && session.user.uid === post.uid && (
-              <button
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-4">
+        {postList.map((post) => (
+          <div key={post._id} className="border p-4 rounded-md">
+            <img
+              src={post.userImageURL}
+              className="p-1 rounded-full h-14"
+              alt={post.username}
+            ></img>
+            <p className="p-1 font-semibold">{post.username}</p>
+            <p className="p-1 font-bold">{post.message}</p>
+            <div className="flex justify-between my-4 items-center">
+              <Link
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                onClick={() => handlePostDelete(post._id)}
+                href={`/posts/${post._id}`}
               >
-                Delete
-              </button>
-            )}
+                View Details
+              </Link>
+              {session && session.user && session.user.uid === post.uid && (
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  onClick={() => handlePostDelete(post._id)}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -97,8 +153,11 @@ export async function getServerSideProps() {
   const db = client.db('nextjs-db');
 
   try {
-    const allPosts = await db.collection('posts').find({}).toArray();
-
+    const allPosts = await db
+      .collection('posts')
+      .find({})
+      .sort({ timestamp: -1 })
+      .toArray();
     // Convert ObjectId to string for serialization
     const serializedPosts = allPosts.map((post) => ({
       ...post,

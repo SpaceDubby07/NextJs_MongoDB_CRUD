@@ -32,13 +32,29 @@ export default function PostPage() {
     return <p>Loading...</p>;
   }
 
+  const timestamp = new Date(post.timestamp);
+  const year = timestamp.getFullYear();
+  const month = timestamp.getMonth() + 1; // Note: Months are zero-based (0 = January)
+  const day = timestamp.getDate();
+
+  const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${
+    day < 10 ? '0' : ''
+  }${day}`;
+
+  console.log(formattedDate); // Output: "2023-09-23"
+
   return (
-    <div>
-      <h1>Post Details</h1>
-      <p>Username: {post.username}</p>
-      <p>Email: {post.email}</p>
-      <p>Message: {post.message}</p>
-      {/* Add any other post details you want to display */}
+    <div className="p-4 text-center ">
+      <h1 className="m-2 font-bold">Post Details</h1>
+      <img
+        src={post.userImageURL}
+        className="h-10 w-10 rounded-full m-2 mx-auto"
+      />
+      <p className="m-2">uid: {post.uid}</p>
+      <p className="m-2">Username: {post.username}</p>
+      <p className="m-2">Email: {post.email}</p>
+      <p className="m-2">Message: {post.message}</p>
+      <p className="m-2">Date Created: {formattedDate}</p>
     </div>
   );
 }

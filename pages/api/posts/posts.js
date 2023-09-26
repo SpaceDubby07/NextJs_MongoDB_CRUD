@@ -36,7 +36,11 @@ export default async function handler(req, res) {
       break;
     case 'GET':
       try {
-        const allPosts = await db.collection('posts').find({}).toArray();
+        const allPosts = await db
+          .collection('posts')
+          .find({})
+          .sort({ timestamp: -1 })
+          .toArray();
         res.status(200).json({ status: 200, data: allPosts });
       } catch (error) {
         res.status(500).json({ error: 'Error fetching posts' });
