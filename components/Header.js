@@ -29,7 +29,7 @@ export default function Header() {
 
       {/* Icons & Settings */}
       <div className="flex items-center">
-        <Link href="/" className="mr-4">
+        <Link href="/posts" className="mr-4">
           Home
         </Link>
         {theme === 'light' ? (

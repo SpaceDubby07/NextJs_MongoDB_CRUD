@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clientPromise from '../../lib/mongodb';
-import PostForm from './components/PostForm';
+import PostForm from '../../components/PostForm';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
