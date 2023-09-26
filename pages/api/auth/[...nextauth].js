@@ -37,7 +37,8 @@ const authOptions = {
         email: user.user.email,
         userImageURL: user.user.image, // Use the appropriate property from the session
         accountCreationDate: new Date(),
-        proivder: user.account.provider,
+        provider: user.account.provider,
+        lastLogin: new Date(),
         isAdmin: false, // Set isAdmin to false by default
         // Add other user properties as needed
       };
