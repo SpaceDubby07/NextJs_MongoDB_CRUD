@@ -48,9 +48,7 @@ export default function PostPage() {
         src={post.userImageURL}
         className="h-10 w-10 rounded-full m-2 mx-auto"
       />
-      <p className="m-2">uid: {post.uid}</p>
       <p className="m-2">Username: {post.username}</p>
-      <p className="m-2">Email: {post.email}</p>
       <p className="m-2">Message: {post.message}</p>
       <p className="m-2">Date Created: {formattedDate}</p>
     </div>
