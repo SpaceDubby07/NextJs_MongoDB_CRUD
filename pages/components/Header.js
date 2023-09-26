@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { SunIcon, MoonIcon } from '@heroicons/react/outline';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 
 export default function Header() {
   const { data: session } = useSession();
@@ -46,19 +46,8 @@ export default function Header() {
       </div>
       {/* change theme */}
       <div className="flex items-center">
-        <Link href="/posts" className="m-4">
-          Posts
-        </Link>
         {session ? (
           <Fragment>
-            {/* <img
-              src={session.user.image}
-              referrerPolicy="no-referrer"
-              alt="user-image"
-              className="h-10 rounded-full cursor-pointer object-cover ml-4"
-              onClick={signOut}
-            /> */}
-            {/* Conditional rendering using ternary operator */}
             {session?.user?.uid === targetUserId ? (
               <Link href={`/account/${session.user.uid}`}>
                 <img

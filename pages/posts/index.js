@@ -4,7 +4,7 @@ import PostForm from './components/PostForm';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
-export default function PostsHome({ posts }) {
+export default function PostsHome({ posts, users }) {
   const { data: session } = useSession();
   const [postList, setPostList] = useState(posts); // Initialize the local state with the initial posts data
 
@@ -131,7 +131,11 @@ export default function PostsHome({ posts }) {
               >
                 View Details
               </Link>
-              {session && session.user && session.user.uid === post.uid && (
+              {users.some(
+                (user) =>
+                  user.uid === session?.user?.uid &&
+                  (user.isAdmin || user.uid === post.uid)
+              ) && (
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                   onClick={() => handlePostDelete(post._id)}
@@ -163,9 +167,18 @@ export async function getServerSideProps() {
       _id: post._id.toString(),
     }));
 
+    const allUsers = await db.collection('users').find({}).toArray();
+    const serializedUser = allUsers.map((user) => ({
+      ...user,
+      _id: user._id.toString(),
+      accountCreationDate: user.accountCreationDate.toString(),
+      lastLogin: user.lastLogin.toString(),
+    }));
+
     return {
       props: {
         posts: serializedPosts,
+        users: serializedUser,
       },
     };
   } catch (error) {
@@ -173,6 +186,7 @@ export async function getServerSideProps() {
     return {
       props: {
         posts: [],
+        users: [],
       },
     };
   }

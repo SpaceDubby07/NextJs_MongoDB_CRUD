@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import clientPromise from '../../../lib/mongodb';
-import { useSession } from 'next-auth/react';
 
 const authOptions = {
   // Configure one or more authentication providers

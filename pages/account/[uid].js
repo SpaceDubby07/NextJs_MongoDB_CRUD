@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import clientPromise from '../../lib/mongodb';
 
 export default function index({ user }) {
-  console.log(user);
   const router = useRouter();
   const { uid } = router.query;
 
@@ -28,13 +27,15 @@ export default function index({ user }) {
   }, [uid, router]);
 
   return (
-    <div>
-      <p>Username: {user?.username}</p>
-      <p>email: {user?.email}</p>
-      <p>provider: {user?.provider === 'google' ? 'google' : null}</p>
-      <p>isAdmin: {user?.isAdmin === 'true' ? 'True' : 'False'}</p>
-      <img src={user?.userImageURL} className="rounded-full"></img>
-      <button onClick={handleSignOut}>Sign Out</button>
+    <div className="items-center text-center">
+      <p className="m-4">Username: {user?.username}</p>
+      <p className="m-4">Email: {user?.email}</p>
+      <p className="m-4">Auth Provider: {user?.provider}</p>
+      <p className="m-4">Admin: {user?.isAdmin ? 'True' : 'False'} </p>
+      <img src={user?.userImageURL} className="rounded-full mx-auto"></img>
+      <button onClick={handleSignOut} className="m-4">
+        Sign Out
+      </button>
     </div>
   );
 }
