@@ -8,6 +8,7 @@ export default function Header() {
   const { data: session } = useSession();
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const targetUserId = session?.user.uid; // Replace with the actual user ID
 
   useEffect(() => {
     setMounted(true);
@@ -50,13 +51,24 @@ export default function Header() {
         </Link>
         {session ? (
           <Fragment>
-            <img
+            {/* <img
               src={session.user.image}
               referrerPolicy="no-referrer"
               alt="user-image"
               className="h-10 rounded-full cursor-pointer object-cover ml-4"
               onClick={signOut}
-            />
+            /> */}
+            {/* Conditional rendering using ternary operator */}
+            {session?.user?.uid === targetUserId ? (
+              <Link href={`/account/${session.user.uid}`}>
+                <img
+                  src={session.user.image}
+                  referrerPolicy="no-referrer"
+                  alt="user-image"
+                  className="h-10 rounded-full cursor-pointer object-cover ml-4"
+                />
+              </Link>
+            ) : null}
           </Fragment>
         ) : (
           <button className="m-4" onClick={signIn}>

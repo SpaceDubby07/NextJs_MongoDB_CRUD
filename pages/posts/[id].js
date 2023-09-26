@@ -41,8 +41,6 @@ export default function PostPage() {
     day < 10 ? '0' : ''
   }${day}`;
 
-  console.log(formattedDate); // Output: "2023-09-23"
-
   return (
     <div className="p-4 text-center ">
       <h1 className="m-2 font-bold">Post Details</h1>

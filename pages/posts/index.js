@@ -7,7 +7,6 @@ import { useSession } from 'next-auth/react';
 export default function PostsHome({ posts }) {
   const { data: session } = useSession();
   const [postList, setPostList] = useState(posts); // Initialize the local state with the initial posts data
-  console.log(postList);
 
   // Function to handle form submission
   const handlePostSubmit = async (formData) => {
