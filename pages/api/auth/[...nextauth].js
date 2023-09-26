@@ -64,6 +64,7 @@ const authOptions = {
       // Continue the sign-in process (returning true)
       return true;
     },
+    secret: process.env.NEXTAUTH_SECRET,
   },
 };
 

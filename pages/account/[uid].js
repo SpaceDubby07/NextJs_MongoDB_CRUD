@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import clientPromise from '../../lib/mongodb';
 
 export default function index({ user }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const { data: session } = useSession();
   const router = useRouter();
   const { uid } = router.query;
 
-  const expectedUserId = user?.uid; // Check if session and session.user are defined
+  const expectedUserId = user?.uid;
 
   const handleSignOut = async () => {
-    if (uid && uid !== expectedUserId) {
+    if (session?.user?.uid !== expectedUserId) {
       router.replace('/posts'); // Redirect to a specific page if the account doesn't match
     } else {
       // Perform sign-out when the account matches or no user is signed in
@@ -20,11 +22,22 @@ export default function index({ user }) {
 
   useEffect(() => {
     // Check if uid exists and if it doesn't match the expected user ID
-    if (uid && uid !== expectedUserId) {
+    if (session?.user?.uid !== expectedUserId) {
       // Redirect to a specific page if the account doesn't match
       router.replace('/posts'); // Replace with the desired redirection URL
+    } else {
+      setIsLoading(false); // Set isLoading to false when the data is ready
     }
-  }, [uid, router]);
+  }, [uid, expectedUserId, router]);
+
+  // Render your component conditionally based on isLoading
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (uid !== session?.user?.uid) {
+    return <div>Unauthorized access</div>; // Or any other message
+  }
 
   return (
     <div className="items-center text-center">
