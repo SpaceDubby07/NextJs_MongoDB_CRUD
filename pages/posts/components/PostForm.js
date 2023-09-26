@@ -4,11 +4,11 @@ import { useSession } from 'next-auth/react';
 export default function PostForm({ onSubmit }) {
   const { data: session } = useSession();
   const [formData, setFormData] = useState({
-    username: session.user.name,
-    email: session.user.email,
+    username: session?.user?.name,
+    email: session?.user?.email,
     message: '',
-    uid: session.user.uid,
-    userImageURL: session.user.image,
+    uid: session?.user?.uid,
+    userImageURL: session?.user?.image,
     timestamp: new Date(), // Update the timestamp when the form is submitted
   });
   const [isEmailValid, setIsEmailValid] = useState(true); // State to track email validation
@@ -31,11 +31,11 @@ export default function PostForm({ onSubmit }) {
     e.preventDefault();
     onSubmit(formData); // Pass the form data to the onSubmit function
     setFormData({
-      username: session.user.name,
-      email: session.user.email,
+      username: session?.user?.name,
+      email: session?.user?.email,
       message: '',
-      uid: session.user.uid,
-      userImageURL: session.user.image,
+      uid: session?.user?.uid,
+      userImageURL: session?.user?.image,
       timestamp: new Date(),
     });
   };
