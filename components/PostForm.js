@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { AiOutlineSend } from 'react-icons/ai';
+import { BsCardImage } from 'react-icons/bs';
 
 export default function PostForm({ onSubmit }) {
   const { data: session } = useSession();
@@ -26,6 +27,14 @@ export default function PostForm({ onSubmit }) {
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
       setIsEmailValid(emailRegex.test(value));
     }
+  };
+
+  const handleImageChange = (e) => {
+    const imageFile = e.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      imageFile,
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -56,13 +65,15 @@ export default function PostForm({ onSubmit }) {
           rows={1}
           autoComplete="off"
         />
-        <button
-          type="submit"
-          className="bg-blue-400 text-white px-4 py-2 rounded"
-          disabled={!formData.username || !isEmailValid || !formData.message}
-        >
-          <AiOutlineSend /> {/* Use the icon directly */}
-        </button>
+        <div className="flex space-x-2">
+          <button
+            type="submit"
+            className="bg-blue-400 text-white px-4 py-2 rounded"
+            disabled={!formData.username || !isEmailValid || !formData.message}
+          >
+            <AiOutlineSend /> {/* Use the icon directly */}
+          </button>
+        </div>
       </form>
     </div>
   );

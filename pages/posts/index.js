@@ -128,7 +128,7 @@ export default function PostsHome({ posts, users }) {
       {postList.map((post) => (
         <div
           key={post._id}
-          className="border-b border-gray-300 last:pb-32 mx-6 flex justify-between"
+          className="border-b border-gray-300 last:pb-32 last:border-none mx-6 flex justify-between"
         >
           <div className="flex items-center space-x-2 p-4">
             <img
