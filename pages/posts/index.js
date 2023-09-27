@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import clientPromise from '../../lib/mongodb';
 import PostForm from '../../components/PostForm';
 import Link from 'next/link';
@@ -10,6 +10,8 @@ export default function PostsHome({ posts, users }) {
   const { data: session } = useSession();
   const [postList, setPostList] = useState(posts); // Initialize the local state with the initial posts data
 
+  // Create a ref for the most recent post element
+  const containerRef = useRef(null);
   // Function to handle form submission
   const handlePostSubmit = async (formData) => {
     try {
@@ -21,10 +23,17 @@ export default function PostsHome({ posts, users }) {
         },
       });
 
+      // Scroll to the bottom after adding a new post
+      if (containerRef.current) {
+        containerRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end', // Scroll to the end of the container
+        });
+      }
       if (res.status === 201) {
         const newPostData = await res.json();
         // get the new post data first, then populate the previous post list
-        setPostList((prevPostList) => [newPostData, ...prevPostList]);
+        setPostList((prevPostList) => [...prevPostList, newPostData]);
       } else {
         // Handle errors
       }
@@ -106,9 +115,9 @@ export default function PostsHome({ posts, users }) {
   }, [postList]); // Include postList as a dependency to compare with the new data
 
   return (
-    <div>
+    <div ref={containerRef}>
       {session ? (
-        <div className="mx-4 relative">
+        <div className="m-4">
           <PostForm onSubmit={handlePostSubmit} />
         </div>
       ) : (
@@ -116,47 +125,45 @@ export default function PostsHome({ posts, users }) {
           Please sign in to create a post
         </div>
       )}
-      <div className="mx-4">
-        {postList.map((post) => (
-          <div
-            key={post._id}
-            className="border-b border-gray-300 pb-2 mb-2 flex justify-between"
-          >
-            <div className="flex items-center space-x-2">
-              <img
-                src={post.userImageURL}
-                className="rounded-full h-10"
-                alt={post.username}
-              />
-              <div className="ml-4">
-                <p className="text-sm font-semibold">{post.username}</p>
-                <p className="text-sm">{post.message}</p>
-              </div>
-            </div>
-            <div className="relative flex items-center">
-              <Link
-                href={`/posts/${post._id}`}
-                className="pt-2 hover:text-blue-400"
-              >
-                <BiInfoCircle className="mr-2" /> {/* Add the icon */}
-                {/* Remove the text */}
-              </Link>
-              {users.some(
-                (user) =>
-                  user.uid === session?.user?.uid &&
-                  (user.isAdmin || user.uid === post.uid)
-              ) && (
-                <button
-                  className="pt-2 hover:text-red-400"
-                  onClick={() => handlePostDelete(post._id)}
-                >
-                  <BsFillTrashFill />
-                </button>
-              )}
+      {postList.map((post) => (
+        <div
+          key={post._id}
+          className="border-b border-gray-300 last:pb-32 mx-6 flex justify-between"
+        >
+          <div className="flex items-center space-x-2 p-4">
+            <img
+              src={post.userImageURL}
+              className="rounded-full h-10"
+              alt={post.username}
+            />
+            <div className="ml-4">
+              <p className="text-sm font-semibold">{post.username}</p>
+              <p className="text-sm">{post.message}</p>
             </div>
           </div>
-        ))}
-      </div>
+          <div className="relative flex items-center">
+            <Link
+              href={`/posts/${post._id}`}
+              className="pt-2 hover:text-blue-400"
+            >
+              <BiInfoCircle className="mr-2" /> {/* Add the icon */}
+              {/* Remove the text */}
+            </Link>
+            {users.some(
+              (user) =>
+                user.uid === session?.user?.uid &&
+                (user.isAdmin || user.uid === post.uid)
+            ) && (
+              <button
+                className="pt-2 hover:text-red-400"
+                onClick={() => handlePostDelete(post._id)}
+              >
+                <BsFillTrashFill />
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

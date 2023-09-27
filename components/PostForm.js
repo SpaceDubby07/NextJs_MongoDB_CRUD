@@ -42,18 +42,19 @@ export default function PostForm({ onSubmit }) {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-2 lightbg darkbg shadow-lg">
+    <div className="z-30 fixed bottom-0 left-0 right-0 p-2 lightbg darkbg">
       <form
         onSubmit={handleSubmit}
         className="flex items-center justify-between"
       >
-        <textarea
+        <input
           name="message"
           value={formData.message}
           onChange={handleChange}
           className="flex-grow mr-2 rounded-sm px-2 py-1"
           placeholder="Type your message..."
           rows={1}
+          autoComplete="off"
         />
         <button
           type="submit"

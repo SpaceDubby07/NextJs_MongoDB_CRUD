@@ -23,7 +23,7 @@ export default function Header() {
   };
 
   return (
-    <div className="z-30 flex justify-between items-center max-w-full sm:mx-auto p-6 shadow-md sticky top-0 left-0 bg-inherit rounded-sm">
+    <div className="z-30 flex justify-between items-center max-w-full sm:mx-auto py-2 px-4 shadow-md sticky top-0 left-0 bg-inherit rounded-sm">
       {/* Logo */}
       {/* Search */}
 
