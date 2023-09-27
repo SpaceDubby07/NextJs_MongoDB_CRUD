@@ -39,7 +39,7 @@ export default async function handler(req, res) {
         const allPosts = await db
           .collection('posts')
           .find({})
-          .sort({ timestamp: -1 })
+          .sort({ timestamp: 1 })
           .toArray();
         res.status(200).json({ status: 200, data: allPosts });
       } catch (error) {

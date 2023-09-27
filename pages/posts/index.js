@@ -3,6 +3,8 @@ import clientPromise from '../../lib/mongodb';
 import PostForm from '../../components/PostForm';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { BsFillTrashFill } from 'react-icons/bs';
+import { BiInfoCircle } from 'react-icons/bi';
 
 export default function PostsHome({ posts, users }) {
   const { data: session } = useSession();
@@ -106,7 +108,7 @@ export default function PostsHome({ posts, users }) {
   return (
     <div>
       {session ? (
-        <div className="mx-4">
+        <div className="mx-4 relative">
           <PostForm onSubmit={handlePostSubmit} />
         </div>
       ) : (
@@ -114,22 +116,30 @@ export default function PostsHome({ posts, users }) {
           Please sign in to create a post
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-4">
+      <div className="mx-4">
         {postList.map((post) => (
-          <div key={post._id} className="border p-4 rounded-md">
-            <img
-              src={post.userImageURL}
-              className="p-1 rounded-full h-14"
-              alt={post.username}
-            ></img>
-            <p className="p-1 font-semibold">{post.username}</p>
-            <p className="p-1 font-bold">{post.message}</p>
-            <div className="flex justify-between my-4 items-center">
+          <div
+            key={post._id}
+            className="border-b border-gray-300 pb-2 mb-2 flex justify-between"
+          >
+            <div className="flex items-center space-x-2">
+              <img
+                src={post.userImageURL}
+                className="rounded-full h-10"
+                alt={post.username}
+              />
+              <div className="ml-4">
+                <p className="text-sm font-semibold">{post.username}</p>
+                <p className="text-sm">{post.message}</p>
+              </div>
+            </div>
+            <div className="relative flex items-center">
               <Link
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                 href={`/posts/${post._id}`}
+                className="pt-2 hover:text-blue-400"
               >
-                View Details
+                <BiInfoCircle className="mr-2" /> {/* Add the icon */}
+                {/* Remove the text */}
               </Link>
               {users.some(
                 (user) =>
@@ -137,10 +147,10 @@ export default function PostsHome({ posts, users }) {
                   (user.isAdmin || user.uid === post.uid)
               ) && (
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  className="pt-2 hover:text-red-400"
                   onClick={() => handlePostDelete(post._id)}
                 >
-                  Delete
+                  <BsFillTrashFill />
                 </button>
               )}
             </div>
@@ -159,7 +169,7 @@ export async function getServerSideProps() {
     const allPosts = await db
       .collection('posts')
       .find({})
-      .sort({ timestamp: -1 })
+      .sort({ timestamp: 1 })
       .toArray();
     // Convert ObjectId to string for serialization
     const serializedPosts = allPosts.map((post) => ({

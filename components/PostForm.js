@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { AiOutlineSend } from 'react-icons/ai';
 
 export default function PostForm({ onSubmit }) {
   const { data: session } = useSession();
@@ -41,71 +42,27 @@ export default function PostForm({ onSubmit }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-wrap items-center justify-around mx-4 my-6"
-    >
-      <div className="">
-        <label htmlFor="username">
-          Username:
-          <input
-            disabled
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="m-2 rounded-xl px-2 py-1 focus:outline-none"
-          />
-        </label>
-      </div>
-      <div style={{ position: 'relative' }}>
-        <label htmlFor="email">
-          Email:
-          <input
-            disabled
-            type="text"
-            name="email"
-            id="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`m-2 rounded-xl px-2 py-1 focus:outline-none ${
-              isEmailValid ? '' : 'focus:outline-red-500'
-            }`} // Apply a green border for valid emails and a red border for invalid emails
-          />
-          {!isEmailValid && (
-            <p
-              className="text-red-500"
-              style={{
-                position: 'absolute',
-                top: '100%', // Position the error message below the input
-                left: '0',
-              }}
-            >
-              Invalid email address
-            </p>
-          )}
-        </label>
-      </div>
-      <div>
-        <label htmlFor="message" className="items-center flex">
-          Message:
-          <textarea
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            className="m-2 rounded-xl px-2 py-1"
-          />
-        </label>
-      </div>
-      <div>
+    <div className="fixed bottom-0 left-0 right-0 p-2 lightbg darkbg shadow-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center justify-between"
+      >
+        <textarea
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          className="flex-grow mr-2 rounded-sm px-2 py-1"
+          placeholder="Type your message..."
+          rows={1}
+        />
         <button
           type="submit"
-          className="text-blue-400"
+          className="bg-blue-400 text-white px-4 py-2 rounded"
           disabled={!formData.username || !isEmailValid || !formData.message}
         >
-          Submit
+          <AiOutlineSend /> {/* Use the icon directly */}
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
