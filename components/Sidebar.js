@@ -30,7 +30,7 @@ export default function Sidebar() {
       {/* This controls the size of the sidebar */}
       <div
         className={` ${
-          open ? 'w-44 p-5' : 'w-4'
+          open ? 'w-44 p-5' : 'w-4 p-4'
         } h-screen relative overflow-y-auto scrollbar-none`}
       >
         {/* This controls the hamburger icon */}
