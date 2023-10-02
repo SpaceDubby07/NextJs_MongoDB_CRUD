@@ -1,11 +1,12 @@
 import { IoClose } from 'react-icons/io5';
 import { HiDocumentText } from 'react-icons/hi';
 import { AiFillHome } from 'react-icons/ai';
+import { FaUserFriends } from 'react-icons/fa';
 import { MdManageAccounts } from 'react-icons/md';
 import { BsMoonStarsFill, BsFillSunFill } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Sidebar(props) {
   const { theme } = useTheme();
@@ -16,29 +17,31 @@ export default function Sidebar(props) {
     { title: 'Posts', src: 'posts', icon: <HiDocumentText /> },
     {
       title: 'Account',
-      src: session ? `accounts/${session?.user?.uid}` : 'auth/signin',
+      src: session ? `account/${session?.user?.uid}` : 'auth/signin',
       icon: <MdManageAccounts />,
     },
-    { title: 'Other', src: '', icon: <HiDocumentText /> },
+    { title: 'Friends', src: '', icon: <FaUserFriends /> },
   ];
 
   return (
     <div
       className={`${
-        props.open ? 'translate-x-0 z-40' : '-translate-x-full'
-      } fixed top-0 left-0 h-full w-48 lightbg darkbg`}
+        props.open
+          ? 'translate-x-0 z-40 drop-shadow-[0_0_35px_rgba(0,0,0,0.65)]'
+          : '-translate-x-full '
+      } fixed top-0 left-0 h-full w-48 bg-zinc-200 dark:bg-zinc-900`}
     >
       <IoClose
         onClick={props.closeSidebar}
-        className="text-red-600 mt-6 ml-4 cursor-pointer text-2xl"
+        className="text-red-600 mt-4 ml-3 cursor-pointer text-2xl"
       />
       {/* links */}
       <div className="">
-        <ul className="pt-6">
+        <ul className="pt-4 m-2">
           {Menus.map((Menu, index) => (
             <li
               key={index}
-              className="flex rounded-md p-2 cursor-pointer text-sm"
+              className="flex rounded-md p-2 cursor-pointer text-sm hover:text-base hover:bg-zinc-900 hover:text-white dark:hover:lightbg dark:hover:text-black"
             >
               <Link
                 href={`/${Menu.src}`}
@@ -50,7 +53,7 @@ export default function Sidebar(props) {
               </Link>
             </li>
           ))}
-          <div className="absolute left-4 bottom-10 flex space-x-4">
+          <div className="absolute left-4 bottom-6 flex space-x-8 items-center">
             <li onClick={props.changeTheme}>
               {theme === 'light' ? (
                 <BsMoonStarsFill
@@ -65,11 +68,16 @@ export default function Sidebar(props) {
               )}
             </li>
             {!session ? (
-              <li className="cursor-pointer" onClick={signIn}>
-                Sign In
+              <li className="cursor-pointer hover:bg-zinc-900 hover:text-white dark:hover:lightbg dark:hover:text-black p-2 px-6 rounded-md">
+                <Link href="/auth/signin" onClick={props.closeSidebar}>
+                  Sign In
+                </Link>
               </li>
             ) : (
-              <li className="cursor-pointer" onClick={signOut}>
+              <li
+                className="cursor-pointer hover:bg-zinc-900 hover:text-white dark:hover:lightbg dark:hover:text-black p-2 px-6 rounded-md"
+                onClick={signOut}
+              >
                 Sign Out
               </li>
             )}

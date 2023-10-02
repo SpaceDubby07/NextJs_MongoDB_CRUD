@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import clientPromise from '../../lib/mongodb';
-import PostForm from '../../components/PostForm';
+import PostForm from '../../components/Posts/PostForm';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { BsFillTrashFill } from 'react-icons/bs';
@@ -117,7 +117,7 @@ export default function PostsHome({ posts, users }) {
   return (
     <div ref={containerRef} className="w-full">
       {session ? (
-        <div className="m-4">
+        <div>
           <PostForm onSubmit={handlePostSubmit} />
         </div>
       ) : (

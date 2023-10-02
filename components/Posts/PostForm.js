@@ -43,7 +43,7 @@ export default function PostForm({ onSubmit }) {
   };
 
   return (
-    <div className="z-30 fixed bottom-0 w-[85%] p-2 lightbg darkbg">
+    <div className="z-30 fixed bottom-0 right-0 left-0 p-2 lightbg darkbg">
       <form
         onSubmit={handleSubmit}
         className="flex items-center justify-between"

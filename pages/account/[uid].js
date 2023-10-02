@@ -11,44 +11,32 @@ export default function index({ user }) {
 
   const expectedUserId = user?.uid;
 
-  const handleSignOut = async () => {
-    if (session?.user?.uid !== expectedUserId) {
-      router.replace('/posts'); // Redirect to a specific page if the account doesn't match
-    } else {
-      // Perform sign-out when the account matches or no user is signed in
-      await signOut({ callbackUrl: '/' });
-    }
-  };
+  // useEffect(() => {
+  //   // Check if uid exists and if it doesn't match the expected user ID
+  //   if (session?.user?.uid !== expectedUserId) {
+  //     // Redirect to a specific page if the account doesn't match
+  //     router.replace('/posts'); // Replace with the desired redirection URL
+  //   } else {
+  //     setIsLoading(false); // Set isLoading to false when the data is ready
+  //   }
+  // }, [uid, expectedUserId, router]);
 
-  useEffect(() => {
-    // Check if uid exists and if it doesn't match the expected user ID
-    if (session?.user?.uid !== expectedUserId) {
-      // Redirect to a specific page if the account doesn't match
-      router.replace('/posts'); // Replace with the desired redirection URL
-    } else {
-      setIsLoading(false); // Set isLoading to false when the data is ready
-    }
-  }, [uid, expectedUserId, router]);
+  // // Render your component conditionally based on isLoading
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  // Render your component conditionally based on isLoading
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (uid !== session?.user?.uid) {
-    return <div>Unauthorized access</div>; // Or any other message
-  }
+  // if (uid !== session?.user?.uid) {
+  //   return <div>Unauthorized access</div>; // Or any other message
+  // }
 
   return (
-    <div className="items-center text-center">
+    <div className="items-center m-6">
       <p className="m-4">Username: {user?.username}</p>
       <p className="m-4">Email: {user?.email}</p>
       <p className="m-4">Auth Provider: {user?.provider}</p>
       <p className="m-4">Admin: {user?.isAdmin ? 'True' : 'False'} </p>
-      <img src={user?.userImageURL} className="rounded-full mx-auto"></img>
-      <button onClick={handleSignOut} className="m-4">
-        Sign Out
-      </button>
+      <img src={user?.userImageURL} className="rounded-full"></img>
     </div>
   );
 }
