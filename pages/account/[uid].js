@@ -11,24 +11,24 @@ export default function index({ user }) {
 
   const expectedUserId = user?.uid;
 
-  // useEffect(() => {
-  //   // Check if uid exists and if it doesn't match the expected user ID
-  //   if (session?.user?.uid !== expectedUserId) {
-  //     // Redirect to a specific page if the account doesn't match
-  //     router.replace('/posts'); // Replace with the desired redirection URL
-  //   } else {
-  //     setIsLoading(false); // Set isLoading to false when the data is ready
-  //   }
-  // }, [uid, expectedUserId, router]);
+  useEffect(() => {
+    // Check if uid exists and if it doesn't match the expected user ID
+    if (session?.user?.uid !== expectedUserId) {
+      // Redirect to a specific page if the account doesn't match
+      router.replace('/posts'); // Replace with the desired redirection URL
+    } else {
+      setIsLoading(false); // Set isLoading to false when the data is ready
+    }
+  }, [uid, expectedUserId, router]);
 
-  // // Render your component conditionally based on isLoading
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  // Render your component conditionally based on isLoading
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // if (uid !== session?.user?.uid) {
-  //   return <div>Unauthorized access</div>; // Or any other message
-  // }
+  if (uid !== session?.user?.uid) {
+    return <div>Unauthorized access</div>; // Or any other message
+  }
 
   return (
     <div className="items-center m-6">

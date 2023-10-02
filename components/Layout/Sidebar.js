@@ -1,9 +1,12 @@
 import { IoClose } from 'react-icons/io5';
-import { HiDocumentText } from 'react-icons/hi';
 import { AiFillHome } from 'react-icons/ai';
 import { FaUserFriends } from 'react-icons/fa';
 import { MdManageAccounts } from 'react-icons/md';
-import { BsMoonStarsFill, BsFillSunFill } from 'react-icons/bs';
+import {
+  BsMoonStarsFill,
+  BsFillSunFill,
+  BsFillChatTextFill,
+} from 'react-icons/bs';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
@@ -14,13 +17,12 @@ export default function Sidebar(props) {
 
   const Menus = [
     { title: 'Home', src: '', icon: <AiFillHome /> },
-    { title: 'Posts', src: 'posts', icon: <HiDocumentText /> },
+    { title: 'Chat', src: 'posts', icon: <BsFillChatTextFill /> },
     {
       title: 'Account',
       src: session ? `account/${session?.user?.uid}` : 'auth/signin',
       icon: <MdManageAccounts />,
     },
-    { title: 'Friends', src: '', icon: <FaUserFriends /> },
   ];
 
   return (
