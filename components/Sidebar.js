@@ -27,7 +27,6 @@ export default function Sidebar() {
         open ? '' : 'flex-col w-screen absolute top-0 right-0 left-0'
       }`}
     >
-      {' '}
       {/* This controls the size of the sidebar */}
       <div
         className={` ${

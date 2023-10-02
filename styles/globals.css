@@ -17,4 +17,5 @@ html::-webkit-scrollbar {
 
 html {
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }

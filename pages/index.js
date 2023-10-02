@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <div className="mx-auto p-4 max-h-screen overflow-y-auto scrollbar-none">
+    <div className="mx-auto p-4 max-h-screen overflow-y-scroll scrollbar-none">
       <div className="text-center font-bold">HOME PAGE</div>
       <div>
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis ea
