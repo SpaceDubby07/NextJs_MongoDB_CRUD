@@ -1,100 +1,80 @@
-// Sidebar.js
+import { IoClose } from 'react-icons/io5';
+import { HiDocumentText } from 'react-icons/hi';
+import { AiFillHome } from 'react-icons/ai';
+import { MdManageAccounts } from 'react-icons/md';
+import { BsMoonStarsFill, BsFillSunFill } from 'react-icons/bs';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { useSession, signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { AiOutlineMenu, AiFillHome, AiOutlineUser } from 'react-icons/ai';
-import { BsFillChatLeftTextFill } from 'react-icons/bs';
-import Signin from '../pages/auth/signin';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
-export default function Sidebar() {
+export default function Sidebar(props) {
+  const { theme } = useTheme();
   const { data: session } = useSession();
-  const [open, setOpen] = useState(true);
+
   const Menus = [
     { title: 'Home', src: '', icon: <AiFillHome /> },
-    { title: 'Posts', src: 'posts', icon: <BsFillChatLeftTextFill /> },
+    { title: 'Posts', src: 'posts', icon: <HiDocumentText /> },
     {
       title: 'Account',
-      src: session?.user?.uid ? `account/${session.user.uid}` : 'auth/signin',
-      icon: <AiOutlineUser />,
-      gap: true,
+      src: session ? `accounts/${session?.user?.uid}` : 'auth/signin',
+      icon: <MdManageAccounts />,
     },
+    { title: 'Other', src: '', icon: <HiDocumentText /> },
   ];
 
   return (
-    // flex for full length of screen
     <div
-      className={`flex flex-row ${
-        open ? '' : 'flex-col w-screen absolute top-0 right-0 left-0'
-      }`}
+      className={`${
+        props.open ? 'translate-x-0 z-40' : '-translate-x-full'
+      } fixed top-0 left-0 h-full w-48 lightbg darkbg`}
     >
-      {/* This controls the size of the sidebar */}
-      <div
-        className={` ${
-          open ? 'w-44 p-5' : 'w-4 p-4'
-        } h-screen relative overflow-y-auto scrollbar-none`}
-      >
-        {/* This controls the hamburger icon */}
-        <div
-          className={`${
-            open
-              ? 'flex items-center space-x-2 pl-1'
-              : 'absolute top-2 left-2 p-1 items-center'
-          }`}
-        >
-          <AiOutlineMenu
-            className="cursor-pointer"
-            onClick={() => setOpen(!open)}
-          />
-          {(open && session && (
-            <Link href={`/account/${session?.user?.uid}`}>
-              {session?.user?.name}
-            </Link>
-          )) ||
-            (open && (
-              <div className="hover:cursor-pointer" onClick={() => signIn()}>
-                Sign in
-              </div>
-            ))}
-        </div>
-        {open && !session && (
-          <div className="pt-6 pl-1">
-            <Link href="/">
-              {open ? (
-                <div className="items-center flex space-x-2">
-                  <AiFillHome />
-                  <p>Home</p>
-                </div>
-              ) : (
-                ''
-              )}
-            </Link>
-          </div>
-        )}
-        {open && session && (
-          <ul className="pt-6">
-            {Menus.map((Menu, index) => (
-              <li
-                key={index}
-                className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4
-              ${Menu.gap ? 'mt-3' : 'mt-2'} ${
-                  index === 0 && 'bg-light-white'
-                } `}
+      <IoClose
+        onClick={props.closeSidebar}
+        className="text-red-600 mt-6 ml-4 cursor-pointer text-2xl"
+      />
+      {/* links */}
+      <div className="">
+        <ul className="pt-6">
+          {Menus.map((Menu, index) => (
+            <li
+              key={index}
+              className="flex rounded-md p-2 cursor-pointer text-sm"
+            >
+              <Link
+                href={`/${Menu.src}`}
+                className="flex items-center gap-x-2"
+                onClick={props.closeSidebar}
               >
-                <Link
-                  href={`/${Menu.src}`}
-                  className="items-center flex space-x-4"
-                >
-                  {Menu.icon}
-                  <span
-                    className={`${!open && 'hidden'} origin-left duration-200`}
-                  >
-                    {Menu.title}
-                  </span>
-                </Link>
+                <span>{Menu.icon}</span>
+                <span>{Menu.title}</span>
+              </Link>
+            </li>
+          ))}
+          <div className="absolute left-4 bottom-10 flex space-x-4">
+            <li onClick={props.changeTheme}>
+              {theme === 'light' ? (
+                <BsMoonStarsFill
+                  className="h-5 w-5 mt-1 cursor-pointer text-slate-900"
+                  onClick={props.changeTheme}
+                />
+              ) : (
+                <BsFillSunFill
+                  className="h-5 w-5 mt-1 cursor-pointer text-yellow-500"
+                  onClick={props.changeTheme}
+                />
+              )}
+            </li>
+            {!session ? (
+              <li className="cursor-pointer" onClick={signIn}>
+                Sign In
               </li>
-            ))}
-          </ul>
-        )}
+            ) : (
+              <li className="cursor-pointer" onClick={signOut}>
+                Sign Out
+              </li>
+            )}
+          </div>
+        </ul>
       </div>
     </div>
   );

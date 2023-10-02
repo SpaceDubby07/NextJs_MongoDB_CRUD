@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import Providers from './providers';
 import { SessionProvider } from 'next-auth/react';
-import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
 
 export default function App({
   Component,
@@ -10,8 +10,8 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <Providers>
-        <div className="lightbg darkbg dark:text-gray-200 text-gray-800 min-h-screen select-none flex">
-          <Sidebar />
+        <div className="lightbg darkbg dark:text-gray-200 text-gray-800 min-h-screen select-none">
+          <Header />
           <Component {...pageProps} />
         </div>
       </Providers>
