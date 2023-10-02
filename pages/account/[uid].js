@@ -16,7 +16,7 @@ export default function index({ user }) {
       router.replace('/posts'); // Redirect to a specific page if the account doesn't match
     } else {
       // Perform sign-out when the account matches or no user is signed in
-      await signOut({ callbackUrl: '/posts' });
+      await signOut({ callbackUrl: '/' });
     }
   };
 

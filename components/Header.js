@@ -29,7 +29,7 @@ export default function Header() {
 
       {/* Icons & Settings */}
       <div className="flex items-center">
-        <Link href="/posts" className="mr-4">
+        <Link href="/" className="mr-4">
           Home
         </Link>
         {theme === 'light' ? (
@@ -46,6 +46,9 @@ export default function Header() {
       </div>
       {/* change theme */}
       <div className="flex items-center">
+        <Link href="/posts" className="mr-4">
+          Chat
+        </Link>
         {session ? (
           <Fragment>
             {session?.user?.uid === targetUserId ? (

@@ -5,8 +5,8 @@ export default function Signin({ providers }) {
   return (
     <Fragment>
       {/* <Header /> */}
-      <div className="flex justify-center space-x-7 mt-20">
-        <div className="dark:bg-gray-950 bg-zinc-50 h-[475px] w-[400px] rounded-xl shadow-md">
+      <div className="mx-auto p-2 max-h-screen overflow-y-auto scrollbar-none">
+        <div className="flex mx-auto p-4 max-h-screen overflow-y-auto scrollbar-none">
           {Object.values(providers).map((provider) => (
             <div className="flex flex-col items-center" key={provider.name}>
               <p className="italic my-10 text-center text-md">Sign In</p>

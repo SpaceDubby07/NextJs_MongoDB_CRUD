@@ -29,14 +29,6 @@ export default function PostForm({ onSubmit }) {
     }
   };
 
-  const handleImageChange = (e) => {
-    const imageFile = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      imageFile,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData); // Pass the form data to the onSubmit function
@@ -51,7 +43,7 @@ export default function PostForm({ onSubmit }) {
   };
 
   return (
-    <div className="z-30 fixed bottom-0 left-0 right-0 p-2 lightbg darkbg">
+    <div className="z-30 fixed bottom-0 w-[85%] p-2 lightbg darkbg">
       <form
         onSubmit={handleSubmit}
         className="flex items-center justify-between"

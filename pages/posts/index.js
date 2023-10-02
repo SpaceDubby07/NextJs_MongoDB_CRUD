@@ -115,7 +115,7 @@ export default function PostsHome({ posts, users }) {
   }, [postList]); // Include postList as a dependency to compare with the new data
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="w-full">
       {session ? (
         <div className="m-4">
           <PostForm onSubmit={handlePostSubmit} />
