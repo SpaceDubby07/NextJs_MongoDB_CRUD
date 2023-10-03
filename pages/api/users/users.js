@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 
 export default async function handler(req, res) {
   const client = await clientPromise;
-  const db = client.db('nextjs-db');
+  const db = client.db(process.env.DB_NAME);
   switch (req.method) {
     case 'POST':
       const bodyObject = req.body;

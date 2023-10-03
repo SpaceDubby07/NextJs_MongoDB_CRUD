@@ -44,7 +44,7 @@ export default function index({ user }) {
 // match the user session data with the database data
 export async function getServerSideProps(ctx) {
   const client = await clientPromise;
-  const db = client.db('nextjs-db');
+  const db = client.db(process.env.DB_NAME);
   const { uid } = ctx.query;
   try {
     // Find the user by uid and convert the cursor to an array

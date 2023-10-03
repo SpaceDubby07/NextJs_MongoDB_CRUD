@@ -13,7 +13,7 @@ const NotFound = () => {
 
     // Redirect to the home page when countdown reaches 0
     if (countdown === 0) {
-      router.push('/');
+      router.back();
     }
 
     // Clear the interval when the component is unmounted
@@ -41,7 +41,7 @@ const NotFound = () => {
       />
       <p className="text-lg mb-8">Don't worry, we will help you escape!</p>
       <p className="text-sm text-gray-500">
-        Redirecting to the home page in {countdown} seconds...
+        Redirecting in {countdown} seconds...
       </p>
     </div>
   );

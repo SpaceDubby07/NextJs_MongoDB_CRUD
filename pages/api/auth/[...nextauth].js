@@ -24,7 +24,7 @@ const authOptions = {
 
     async signIn(user, account, profile) {
       const client = await clientPromise;
-      const db = client.db('nextjs-db');
+      const db = client.db(process.env.DB_NAME);
 
       // Check the user data from the session
       // console.log('User Data from Session:', user);

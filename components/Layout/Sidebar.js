@@ -16,8 +16,8 @@ export default function Sidebar(props) {
   const { data: session } = useSession();
 
   const Menus = [
-    { title: 'Home', src: '', icon: <AiFillHome /> },
-    { title: 'Chat', src: 'posts', icon: <BsFillChatTextFill /> },
+    // { title: 'Home', src: '', icon: <AiFillHome /> },
+    { title: 'Chat', src: 'chat', icon: <BsFillChatTextFill /> },
     {
       title: 'Account',
       src: session ? `account/${session?.user?.uid}` : 'auth/signin',
@@ -30,7 +30,7 @@ export default function Sidebar(props) {
       className={`${
         props.open
           ? 'translate-x-0 z-40 drop-shadow-[0_0_35px_rgba(0,0,0,0.65)]'
-          : '-translate-x-full '
+          : '-translate-x-full'
       } fixed top-0 left-0 h-full w-48 bg-zinc-200 dark:bg-zinc-900`}
     >
       <IoClose
